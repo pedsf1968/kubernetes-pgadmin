@@ -1,0 +1,106 @@
+# change password on first connexion
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgadmin-configmap
+  labels:
+    name: pgadmin-configmap
+    app: pgadmin
+data:
+  PGADMIN_DEFAULT_EMAIL: pedsf.fullstack@gmail.com
+  PGADMIN_DEFAULT_PASSWORD: pgadmin
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pgadmin-pv
+  labels:
+    name: pgadmin-pv
+    app: pgadmin
+spec:
+  storageClassName: nfs
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  accessModes: 
+    - ReadWriteMany
+  capacity:
+    storage: "100Mi"
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    server: 10.1.55.201
+    path: "/export/kubernetes/pgadmin/pgadmin-pv-01"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgadmin-pvc
+  labels:
+    name: pgadmin-pvc
+    app: pgadmin
+spec:
+  storageClassName: nfs
+  accessModes: 
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "100Mi"
+  selector:
+    matchLabels:
+      name: pgadmin-pv
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+  labels:
+    name: pgadmin
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:      
+      containers:
+      - name: pgadmin
+        image: dpage/pgadmin4
+        envFrom:
+          - configMapRef:
+              name: pgadmin-configmap
+        ports:
+        - name: pgadmin-port
+          containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - name: pgadmin-storage
+          mountPath: /var/lib/pgadmin
+      volumes:
+      - name: pgadmin-storage
+        persistentVolumeClaim:
+          claimName: pgadmin-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin-service
+  labels:
+    name: pgadmin-service
+    app: pgadmin
+spec:
+  type: LoadBalancer
+  selector:
+    app: pgadmin
+  ports:
+  - port: 80
+    protocol: TCP

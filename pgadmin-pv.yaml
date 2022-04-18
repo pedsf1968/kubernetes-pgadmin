@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pgadmin-pv
+  labels:
+    name: pgadmin-pv
+    app: pgadmin
+spec:
+  storageClassName: nfs
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  accessModes: 
+    - ReadWriteMany
+  capacity:
+    storage: "100Mi"
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    server: 10.1.55.201
+    path: "/export/kubernetes/pgadmin/pgadmin-pv-01"
+
