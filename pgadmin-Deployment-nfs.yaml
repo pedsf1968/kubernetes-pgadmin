@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pgadmin
+  namespace: devops
   labels:
     name: pgadmin
     app: pgadmin
@@ -13,6 +14,7 @@ spec:
       app: pgadmin
   template:
     metadata:
+      namespace: devops
       labels:
         app: pgadmin
     spec:      

@@ -1,21 +1,35 @@
 # kubernetes-pgadmin
 Kubernetes pgAdmin deployment
 
-## PersistentVolume using NFS storage 
-Change NFS server IP and path
-pgadmin-pv.yaml
+# Namespaces
+devops-Namespace.yaml
 
-## PersistentVolumeClaim
-pgadmin-pvc.yaml
 
-## ConfigMap for credentials 
+## ConfigMaps
 Very \!/ not secure but you can change the password on first connection
-pgadmin-configmap.yaml
+## pgAdmin ConfigMap
+pgadmin-ConfigMap.yaml
 
-# Deployment of pgAdmin
-pgadmin-deployment.yaml
+
+# Storages
+## pgAdmin PersistentVolume using NFS storage 
+Change NFS server IP and path
+pgadmin-PersistentVolume-nfs.yaml
+
+## pgAdmin PersistentVolumeClaim using NFS PersistentVolume 
+pgadmin-PersistentVolumeClaim-nfs.yaml
+
+
+# Deployments
+## pgAdmin Deployment using NFS storage
+pgadmin-Deployment-nfs.yaml
+
 
 # Services
-Use one of them (I use loadbalancer with MetalLB on my private cluster)
-pgadmin-loadbalancer-service.yaml
-pgadmin-nodeport-service.yaml
+
+## pgAdmin LoadBalancer Service
+Use one of them (I use LoadBalancer with MetalLB on my private cluster)
+pgadmin-Service-LoadBalancer.yaml
+
+## pgAdmin NodePort Service
+pgadmin-Service-NodePort.yaml

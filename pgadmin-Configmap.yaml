@@ -4,6 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pgadmin-configmap
+  namespace: devops
   labels:
     name: pgadmin-configmap
     app: pgadmin

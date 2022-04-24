@@ -3,6 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pgadmin-pvc
+  namespace: devops
   labels:
     name: pgadmin-pvc
     app: pgadmin
